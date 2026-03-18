@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realitní lead formulář</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #14213d;
+      --muted: #5f6b85;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #0f766e;
+      --border: #dbe3f0;
+      --danger: #b91c1c;
+      --shadow: 0 20px 50px rgba(20, 33, 61, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(219, 227, 240, 0.8);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 36px;
+      position: relative;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(15, 118, 110, 0.15), transparent 35%),
+        #fff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--primary-dark);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.02;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 56ch;
+      margin: 0 0 24px;
+    }
+
+    .benefits {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .benefit {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(245, 247, 251, 0.75);
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: rgba(15, 118, 110, 0.12);
+      color: var(--success);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .form-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+
+    .form-title {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .form-lead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .consent {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+      color: var(--muted);
+      margin: 8px 0 18px;
+    }
+
+    .consent input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+    }
+
+    .submit-btn {
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease;
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.28);
+    }
+
+    .submit-btn:hover { transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: .65; cursor: wait; }
+
+    .fineprint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success {
+      display: block;
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--success);
+      border: 1px solid rgba(15, 118, 110, 0.18);
+    }
+
+    .message.error {
+      display: block;
+      background: rgba(185, 28, 28, 0.08);
+      color: var(--danger);
+      border: 1px solid rgba(185, 28, 28, 0.16);
+    }
+
+    .social-proof {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #f3f7ff;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      body { padding: 14px; }
+      .hero, .form-card { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="panel hero">
+      <div class="badge">🏠 Realitní poptávkový formulář</div>
+      <h1>Chcete z nemovitosti vytěžit maximum?</h1>
+      <p class="subtitle">
+        Nenechávejte peníze na stole. Pomůžeme vám prodat nebo pronajmout nemovitost za nejlepší možnou cenu a bez zbytečných chyb.
+      </p>
+
+      <div class="benefits">
+        <div class="benefit">
+          <div class="check">✓</div>
+          <div>
+            <strong>Správné nastavení ceny</strong><br />
+            Díky zkušenostem víme, jak nemovitost nacenit tak, abyste neprodali pod cenou.
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="check">✓</div>
+          <div>
+            <strong>Rychlejší prodej nebo pronájem</strong><br />
+            Kvalitní prezentace a strategie přitáhne více zájemců.
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="check">✓</div>
+          <div>
+            <strong>Bez stresu a chyb</strong><br />
+            Postaráme se o celý proces, abyste se nemuseli o nic starat.
+          </div>
+        </div>
+      </div>
+
+      <div class="social-proof">
+        <span class="pill">Konzultace zdarma</span>
+        <span class="pill">Bez závazků</span>
+        <span class="pill">Zvýšení ceny nemovitosti</span>
+        <span class="pill">Individuální přístup</span>
+      </div>
+    </section>
+
+    <section class="panel form-card">
+      <h2 class="form-title">Nechte si zavolat k nemovitosti</h2>
+      <p class="form-lead">Vyplňte krátký formulář a ozveme se vám s konkrétním realitním řešením.</p>
+
+      <form id="leadForm" novalidate method="GET" action="https://script.google.com/macros/s/AKfycbyKUwOE8zFnYEBoOvcd1PRgSg3pU0Lvh-Nr5gWpwhc00x-ZzSiqGowBr_pSvbtADVo8/exec" target="hiddenSubmitFrame">
+        <input type="hidden" name="source" id="sourceField" value="web" />
+        <input type="hidden" name="pageUrl" id="pageUrlField" value="" />
+        <div class="grid">
+          <div class="field">
+            <label for="name">Jméno a příjmení</label>
+            <input id="name" name="name" type="text" placeholder="Např. Jana Nováková" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Telefon</label>
+            <input id="phone" name="phone" type="tel" placeholder="+420 777 123 456" required />
+          </div>
+
+          <div class="field full">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" placeholder="vas@email.cz" required />
+          </div>
+
+          <div class="field">
+            <label for="service">Co chcete řešit</label>
+            <select id="service" name="service" required>
+              <option value="">Vyberte možnost</option>
+              <option>Prodej nemovitosti</option>
+              <option>Pronájem nemovitosti</option>
+              <option>Koupě nemovitosti</option>
+              <option>Odhad ceny nemovitosti</option>
+              <option>Investiční konzultace</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="budget">Typ nemovitosti</label>
+            <select id="budget" name="budget">
+              <option value="">Vyberte typ</option>
+              <option>Byt</option>
+              <option>Dům</option>
+              <option>Pozemek</option>
+              <option>Komerční prostor</option>
+              <option>Jiná nemovitost</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="location">Lokalita</label>
+            <input id="location" name="location" type="text" placeholder="Např. Praha 9, Brno, Liberec" />
+          </div>
+
+          <div class="field">
+            <label for="timeline">Kdy to chcete řešit</label>
+            <select id="timeline" name="timeline">
+              <option value="">Vyberte termín</option>
+              <option>Ihned</option>
+              <option>Do 1 měsíce</option>
+              <option>Do 3 měsíců</option>
+              <option>Do 6 měsíců</option>
+              <option>Zatím se informuji</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="message">Doplňující informace</label>
+            <textarea id="message" name="message" placeholder="Napište stručně dispozici, velikost, stav nemovitosti nebo co přesně hledáte..."></textarea>
+          </div>
+        </div>
+
+        <div class="consent">
+          <input id="consent" name="consent" type="checkbox" required />
+          <label for="consent">
+            Souhlasím se zpracováním osobních údajů za účelem zpětného kontaktování.
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Chci konzultaci zdarma</button>
+        <div id="formMessage" class="message" role="status" aria-live="polite"></div>
+        <div class="fineprint">Demo verze ukládá realitní leady do localStorage a současně umí odeslat data na webhook.</div>
+      </form>
+      <iframe name="hiddenSubmitFrame" id="hiddenSubmitFrame" style="display:none;"></iframe>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('leadForm');
+    const messageBox = document.getElementById('formMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const sourceField = document.getElementById('sourceField');
+    const pageUrlField = document.getElementById('pageUrlField');
+
+    function showMessage(text, type) {
+      messageBox.textContent = text;
+      messageBox.className = 'message ' + type;
+    }
+
+    function clearMessage() {
+      messageBox.textContent = '';
+      messageBox.className = 'message';
+    }
+
+    function saveLeadLocally(payload) {
+      const existing = JSON.parse(localStorage.getItem('lead_widget_submissions') || '[]');
+      existing.unshift(payload);
+      localStorage.setItem('lead_widget_submissions', JSON.stringify(existing.slice(0, 100)));
+    }
+
+    function validatePhone(phone) {
+      const cleaned = phone.replace(/[^0-9+]/g, '');
+      return /^\+?[0-9]{9,15}$/.test(cleaned);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearMessage();
+
+      const data = new FormData(form);
+      const payload = {
+        name: String(data.get('name') || '').trim(),
+        phone: String(data.get('phone') || '').trim(),
+        email: String(data.get('email') || '').trim(),
+        service: String(data.get('service') || '').trim(),
+        budget: String(data.get('budget') || '').trim(),
+        location: String(data.get('location') || '').trim(),
+        timeline: String(data.get('timeline') || '').trim(),
+        message: String(data.get('message') || '').trim(),
+        consent: data.get('consent') === 'on',
+        source: new URLSearchParams(window.location.search).get('source') || 'web',
+        pageUrl: window.location.href
+      };
+
+      if (!payload.name || !payload.phone || !payload.email || !payload.service) {
+        showMessage('Prosím vyplňte všechna povinná pole.', 'error');
+        return;
+      }
+
+      if (!validatePhone(payload.phone)) {
+        showMessage('Telefonní číslo nemá správný formát.', 'error');
+        return;
+      }
+
+      if (!payload.consent) {
+        showMessage('Pro odeslání je nutný souhlas se zpracováním údajů.', 'error');
+        return;
+      }
+
+      sourceField.value = payload.source;
+      pageUrlField.value = payload.pageUrl;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Odesílám...';
+
+      try {
+        saveLeadLocally(payload);
+        form.submit();
+        form.reset();
+        sourceField.value = new URLSearchParams(window.location.search).get('source') || 'web';
+        pageUrlField.value = window.location.href;
+        showMessage('Děkujeme. Formulář byl úspěšně odeslán a lead byl uložen.', 'success');
+      } catch (error) {
+        console.error(error);
+        showMessage('Lead se uložil lokálně, ale nepodařilo se propsat do Google tabulky.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Chci konzultaci zdarma';
+      }
+    });
+
+    sourceField.value = new URLSearchParams(window.location.search).get('source') || 'web';
+    pageUrlField.value = window.location.href;
+  </script>
+</body>
+</html>
